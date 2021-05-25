@@ -1,0 +1,38 @@
+_schema-version: "3.1.0"
+ID: it-mini-test
+version: ${project.version}
+description: "Mini Test for SaaS Appl"
+
+modules:
+  - name: it-stage-minitest
+    type: java.tomcat
+    parameters:
+      host: ${it-system-id}-minitest
+      routes:
+        - route: "${it-system-id}-minitest.${domain}"
+      buildpack: sap_java_buildpack
+      instances: 1
+      memory: 1G
+    properties:
+      IT_SYSTEM_ID: ${it-system-id}
+    requires:
+      - name: it-uaa
+      - name: it-logs-services
+
+parameters:
+  keep-existing-routes: false
+  it-system-id: it-stage
+
+parameters-metadata:
+  it-system-id:
+    optional: false
+    overwritable: true
+
+resources:
+  - name: it-uaa
+    type: org.cloudfoundry.existing-service
+    optional: true
+
+  - name: it-logs-services
+    type: org.cloudfoundry.existing-service
+    optional: false
